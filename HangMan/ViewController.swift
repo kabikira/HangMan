@@ -33,6 +33,15 @@ class ViewController: UITableViewController {
                 }
             }
         }
+        tableView.reloadData()
+    }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return usedLetters.count
+    }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Letter", for: indexPath)
+        cell.textLabel?.text = usedLetters[indexPath.row]
+        return cell
     }
     @objc func promptForAnswer() {
         let ac = UIAlertController(title: "Enter answer", message: nil, preferredStyle: .alert)
