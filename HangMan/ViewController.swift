@@ -58,7 +58,7 @@ class ViewController: UITableViewController {
         
         if upperAnswer.count == 1 && upperAnswer != " " {
             if usedLetters.contains(upperAnswer) {
-                print("被ってる")
+                showErrorMessage(errorTitle: "エラー", errorMessage: "その文字は追加済みです")
                return
             }
             if words[0].contains(upperAnswer) {
@@ -77,33 +77,47 @@ class ViewController: UITableViewController {
                     
                 }
             } else {
+                showErrorMessage(errorTitle: "間違いです！", errorMessage: "がんばってね")
                 wrongAnswers += 1
                 print(wrongAnswers)
             }
             
             viewDidLoad()
+        } else {
+            showErrorMessage(errorTitle: "エラー", errorMessage: "空白以外の1文字で入力してください")
         }
         if wrongAnswers == 7 {
             let ac = UIAlertController(title: title, message: "Wrong!", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Continue", style: .default))
+            let resetAction = UIAlertAction(title: "Continue", style: .default) { [weak self] _ in
+                self?.resetGame()
+                
+            }
+            ac.addAction(resetAction)
             present(ac, animated: true)
-            wrongAnswers = 0
-            usedLetters.removeAll()
-            promptWord = ""
-            viewDidLoad()
             
         }
         if promptWord == words[0] {
             let ac = UIAlertController(title: title, message: "End Of Game", preferredStyle: .alert)
-            ac.addAction(UIAlertAction(title: "Done", style: .default))
+            let resetAction = UIAlertAction(title: "Done", style: .default) { [weak self] _ in
+                self?.resetGame()
+                
+            }
+            ac.addAction(resetAction)
             present(ac, animated: true)
-            wrongAnswers = 0
-            usedLetters.removeAll()
-            promptWord = ""
-            viewDidLoad()
         }
         
         
+    }
+    func resetGame() {
+        wrongAnswers = 0
+        usedLetters.removeAll()
+        promptWord = ""
+        viewDidLoad()
+    }
+    func showErrorMessage(errorTitle: String, errorMessage: String) {
+        let ac = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 
 }
